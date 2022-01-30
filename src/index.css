@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind utilities;
+@tailwind components;
+
+.rps-element {
+    @apply p-3 m-2 border-2 rounded-xl cursor-pointer transition duration-150 hover:scale-105
+}
+
+.rps-element-icon {
+    @apply text-2xl
+}
+
+.selected {
+    @apply bg-orange-500
+}
