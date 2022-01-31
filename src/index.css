@@ -3,7 +3,7 @@
 @tailwind components;
 
 .rps-element {
-    @apply p-3 m-2 border-2 rounded-xl cursor-pointer transition duration-150 hover:scale-105
+    @apply p-3.5 m-2 border-2 rounded-xl cursor-pointer transition duration-150 hover:scale-110
 }
 
 .rps-element-icon {
@@ -12,4 +12,8 @@
 
 .selected {
     @apply bg-orange-500
+}
+
+.rps-animation-element {
+    @apply text-7xl m-4
 }
