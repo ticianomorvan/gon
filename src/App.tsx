@@ -16,13 +16,21 @@ import { IconType } from "react-icons/lib";
 import anime from "animejs";
 
 const App = () => {
+  // User variables
   const [userSelection, setUserSelection] = useState<RPSElement>(rock);
   const [userDisplay, setUserDisplay] = useState<ReactElement<IconType>>(<FaHandRock className="rps-animation-element rps-element-user" />)
+
+  // Computer variables
+  const [computerSelection, setComputerSelection] = useState<RPSElement>(paper);
   const [computerDisplay, setComputerDisplay] = useState<ReactElement<IconType>>(<FaHandRock className="rps-animation-element rps-element-computer" />)
+  // Winner variables
   const [winner, setWinner] = useState<boolean | undefined>(undefined);
-  const [winnerText, setWinnerText] = useState('');
+  const [winnerText, setWinnerText] = useState(`You haven't played yet...`);
+
+  // Game elements
   const gameElements = document.getElementsByClassName('rps-element');
 
+  // Set RPS Element as active (orange)
   function setRPSElement(gameElement: RPSElement, gameElementName: string) {
     const gameElementHTML = document.getElementById(`rps-element-${gameElementName}`) as HTMLLIElement;
     setUserSelection(gameElement);
@@ -30,14 +38,16 @@ const App = () => {
     gameElementHTML.classList.add('selected')
   }
 
+  // Reset RPS Elements state
   function resetRPSElement() {
     for (let i = 0; i < 3; i++) {
       gameElements.item(i)?.classList.remove('selected')
     }
   }
 
+  // Main function, creates a RPSGame instance and updates computer, user and winner variables.
   function playRPSGame() {
-    const rpsGame = new RPSGame({ userSelection: userSelection });
+    const rpsGame = new RPSGame({ userSelection: userSelection, computerLastSelection: computerSelection });
     const results = rpsGame.game()
     setWinner(results.status);
     setWinnerText(showWinner({
@@ -45,16 +55,26 @@ const App = () => {
       userSelection: results.userSelection,
       computerSelection: results.computerSelection
     }))
+    setComputerSelection(results.computerSelection);
     setUserDisplay(displayElements(results.userSelection, true));
     setComputerDisplay(displayElements(results.computerSelection, false))
   }
 
+  // Returns the winner text in case of Win, Lose or Tie
   function showWinner({ status, userSelection, computerSelection }: RPSResultsType) {
     if (status) return `You <b>won</b> using <u>${userSelection.name}</u> against ${computerSelection.name}.`;
     else if (status === false) return `You <b>lost</b> using ${userSelection.name} against <u>${computerSelection.name}</u>.`;
-    else return `You <b>withdraw!</b>`
+    else return `You <b>tied!</b>`
   }
 
+  // Returns the winner text's background color based in the result
+  function displayWinner(status: boolean | undefined) {
+    if (status) return `bg-green-600`;
+    else if (status === false) return `bg-red-600`;
+    else return `bg-gray-600`
+  }
+
+  // Returns the icon that will display in place of the user and computer selections
   function displayElements(element: RPSElement, isComputer: boolean) {
     const elementClass = `rps-animation-element ${isComputer ? 'rps-element-user' : 'rps-element-computer'}`;
     if (element.name === 'rock') return <FaHandRock className={elementClass} />
@@ -116,7 +136,7 @@ const App = () => {
           Play!
         </button>
       </section>
-      <section id="rps-text-section" className="text-center">
+      <section id="rps-text-section" className={`text-center m-4 rounded-md ${displayWinner(winner)}`}>
         <p id="winner-text" className="sm:text-lg lg:text-xl p-4">
         </p>
       </section>
