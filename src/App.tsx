@@ -149,7 +149,7 @@ const App = () => {
           by
           {' '}
           <a
-            href="https://ticianomorvan.me/link-tree"
+            href="https://socials.ticianomorvan.me"
             target="_blank"
             rel="noreferrer"
             className="text-blue-300 underline"
